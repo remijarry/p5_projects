@@ -1,7 +1,6 @@
 function cell(posX, posY) {
     this.rowIndex = posX;
     this.colIndex = posY
-    this.oneDimensionalIndex = this.rowIndex * cols + this.colIndex
     this.visited = false;
     //top, right, bottom, left
     this.walls = [true, true, true, true];
@@ -72,48 +71,3 @@ function cell(posX, posY) {
         rect(x, y, cellSize, cellSize);
     };
 }
-
-
-// function Cell {
-
-
-
-//     removeWall(position) {
-//         if (position < 0 || position > this.walls.length)
-//             return;
-//         this.walls[position] = false;
-//     }
-
-//     // Gets a random neightbour that's in the grid
-//     getRandomNeightbour() {
-//         let validNeightbours = []
-//         for (let i = 0; i < dirX.length; i++) {
-//             let rr = this.rowIndex + dirX[i];
-//             let cc = this.colIndex + dirY[i];
-//             if (rr < 0 || cc < 0)
-//                 continue;
-//             if (rr >= rows || cc >= cols)
-//                 continue
-
-
-//             let oneDimensionalIndex = rr * cols + cc
-//             let test = grid[oneDimensionalIndex];
-//             if (test.visited == false)
-//                 validNeightbours.push(test)
-//         }
-//         if (validNeightbours.length > 0) {
-//             var r = floor(random(0, validNeightbours.length));
-//             return validNeightbours[r]
-//         } else {
-//             return undefined;
-//         }
-//     }
-
-//     visit() {
-//         this.visited = true;
-//     }
-
-//     isVisited() {
-//         return this.visited
-//     }
-// }

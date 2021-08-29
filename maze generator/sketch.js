@@ -6,7 +6,7 @@ let rows = Math.floor(width / cellSize);
 let cols = Math.floor(height / cellSize);
 let grid = [];
 let startCell = 0;
-queue = [];
+stack = [];
 
 
 let current;
@@ -34,15 +34,15 @@ function draw() {
   if (next) {
     next.visited = true;
 
-    queue.push(current);
+    stack.push(current);
 
     removeWall(current, next);
 
     current = next;
 
-  } else if (queue.length > 0) {
+  } else if (stack.length > 0) {
     current.backtracked = true;
-    current = queue.pop();
+    current = stack.pop();
   }
 
 }
