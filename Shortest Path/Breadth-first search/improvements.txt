@@ -1,0 +1,1 @@
+A cell should be aware of its neighbours.

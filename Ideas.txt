@@ -1,0 +1,1 @@
+Have a "little man, possibly messi" walking in the maze (controlled by user)
