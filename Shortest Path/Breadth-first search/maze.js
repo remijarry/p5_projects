@@ -3,9 +3,11 @@ function maze(size, nbCells) {
     this.nbCells = nbCells;
     this.cellSize = Math.floor(size / nbCells);
 
+    //todo: refactor this to use only one for loop and calculate a 2D index based on the 1D index
     for (let row = 0; row < nbCells; row++)
         for (let col = 0; col < nbCells; col++)
             this.cells.push(new cell(col, row, this.cellSize));
+
 
     //north, easth, south, west
     let dirX = [-1, 0, 1, 0];
@@ -21,7 +23,7 @@ function maze(size, nbCells) {
 
             var index1D = rr + cc * this.nbCells;
             var neighbour = this.cells[index1D];
-            this.cells[cellIndex].addNeighbour(neighbour);
+            this.cells[cellIndex].addAdjacentNeighbour(neighbour);
         }
     }
 
@@ -41,6 +43,7 @@ function maze(size, nbCells) {
         for (let i = 0; i < this.cells.length; i++) {
             if (this.cells[i].clickedInside(mouseX, mouseY)) {
                 this.cells[i].highlight();
+                maze.breadthFirstSearch(0, this.cells[i])
                 break;
             }
         }
@@ -49,20 +52,19 @@ function maze(size, nbCells) {
     this.generateMaze = function () {
         let stack = [];
         let startCellIndex = floor(random(0, this.cells.length))
-        let startCell = this.cells[0] //this.cells[startCellIndex];
+        let startCell = this.cells[0]
         startCell.visited = true;
         stack.push(startCell);
-        // let current;
         while (stack.length > 0) {
             let current = stack.pop();
             current.visited = true;
-            let next = current.getRandomNeighbour(this.nbCells);
+            let next = current.getRandomNeighbour();
             if (next) {
                 stack.push(current);
                 next.visited = true;
                 stack.push(next)
                 this.removeWall(current, next)
-                current = next;
+                current.addConnectedNeighbours(next);
             } else if (stack.length > 0) {
                 current = stack.pop();
             }
@@ -90,37 +92,41 @@ function maze(size, nbCells) {
     }
 
     this.breadthFirstSearch = function (startCell, destinationCell) {
-        // breadthFirstSearch(array) {
-        //     let queue = [this];
-        //     while (queue.length > 0) {
-        //         const current = queue.shift();
-        //         array.push(current.name);
-        //         for (const child of current.children) {
-        //             queue.push(child);
-        //         }
-        //     }
+        let start = this.cells[startCell];
+        let destination = destinationCell
 
-        //     return array;
-        // }
-
-        // create arrays (node_queue, visited_nodes, and traveled_path)
-        // add the start to the arrays
-        // while the queue is not empty
-        //     take out the first element in the queue
-        //     for each of the neighbors of this first element 
-        //     if its not in the visited set and not blocked
-        //         add this to the arrays
-        //         if this contains what we are looking for
-        //         return the backtrack of this node
-        //         end if
-        //     end if
-        //     end for
-        // end while
-        let queue = [startcell];
-        let path = [startCell];
+        let queue = [start];
+        let traveledPath = [];
         while (queue.length > 0) {
             const current = queue.shift();
 
+            if (current === destination) {
+                console.log(traveledPath);
+                return traveledPath; //this.reconstructPath(startCell, destinationCell, traveledPath);
+            }
+
+            for (const neighbour of current.connectedNeighbours) {
+                if (neighbour.shortedPathVisited === false) {
+                    neighbour.shortedPathVisited = true;
+                    queue.push(neighbour);
+                    traveledPath.push(neighbour);
+                }
+            }
         }
+
+        // reconstruct the path -> 39:29
+    }
+
+    this.reconstructPath = function (startCell, destinationCell, traveledPath) {
+        let path = [];
+        for(let at = destinationCell; at !== undefined; at = traveledPath[at])
+            path.push(at);
+
+
+        // reverse path
+
+        if (path[0] == startCell)
+            return path;
+        return [];
     }
 }

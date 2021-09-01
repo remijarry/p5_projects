@@ -1,1 +1,4 @@
-A cell should be aware of its neighbours.
+when creating the list of neighbour, 
+the array should only contain the accessible neighbours (with no walls in between them)
+
+Ajouter des murs aux cellules qui sont aux extrêmités du labyrinthe

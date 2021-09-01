@@ -3,9 +3,12 @@ function cell(posX, posY, size) {
     this.posY = posY;
     this.size = size;
     this.visited = false;
+    this.shortedPathVisited = false;
 
-    // available neighbours (with open walls)
-    this.neighbours = [];
+    // neighbours
+    this.adjacentNeighbours = [];
+    // neighbours with opens walls
+    this.connectedNeighbours = [];
 
     //where do x and y start in pixels
     this.startX = this.posX * size;
@@ -25,8 +28,10 @@ function cell(posX, posY, size) {
     this.show = function () {
         stroke(51);
         strokeWeight(2);
+
         let p = createP(this.posX + ", " + this.posY);
         p.position(this.startX + 10, this.startY + 10)
+
         if (this.walls[this.top]) {
             line(this.startX, this.startY, this.startX + this.size, this.startY);
         }
@@ -59,12 +64,16 @@ function cell(posX, posY, size) {
         this.walls[direction] = false;
     }
 
-    this.addNeighbour = function (cell) {
-        this.neighbours.push(cell);
+    this.addAdjacentNeighbour = function (cell) {
+        this.adjacentNeighbours.push(cell);
     }
 
-    this.getRandomNeighbour = function (bound) {
-        var neighbours = this.getNeighbours(bound);
+    this.addConnectedNeighbours = function(neighbour) {
+        this.connectedNeighbours.push(neighbour);
+    }
+
+    this.getRandomNeighbour = function () {
+        var neighbours = this.getAdjacentNeighbours();
         if (neighbours.length > 0) {
             let r = floor(random(0, neighbours.length));
             return neighbours[r];
@@ -73,27 +82,13 @@ function cell(posX, posY, size) {
         }
     }
 
-    this.getNeighbours = function (bound) {
+    this.getAdjacentNeighbours = function () {
         var neighbours = [];
 
-        //north, easth, south, west
-        let dirX = [-1, 0, 1, 0];
-        let dirY = [0, 1, 0, -1];
-        for (let i = 0; i < dirX.length; i++) {
-            let rr = this.posX + dirX[i];
-            let cc = this.posY + dirY[i];
-            if (rr < 0 || cc < 0)
-                continue
-            if (rr >= bound || cc >= bound)
-                continue;
-
-            var index1D = rr + cc * bound;
-            var neighbour = this.cells[index1D];
-            if (neighbour.visited == false) {
-                neighbours.push(neighbour);
-            }
+        for (let i = 0; i < this.adjacentNeighbours.length; i++) {
+            if (this.adjacentNeighbours[i].visited === false)
+                neighbours.push(this.adjacentNeighbours[i]);
         }
-
         return neighbours;
     }
 
