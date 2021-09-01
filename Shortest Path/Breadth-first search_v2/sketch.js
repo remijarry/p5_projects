@@ -1,35 +1,65 @@
 let size = 800;
-let nbCells = 5;
+let nbCells = 50;
 let cellSize = Math.floor(size / nbCells);
 let grid = [];
 
-let start;
-let end;
+let current;
+let start = 0;
+let end = 24;
+let destination;
+let stop = false;
+let queue = [];
+let prev = [];
+
 function setup() {
     createCanvas(size, size);
     createGridWithCells();
     addNeighbours();
     generateMaze();
+
+    // frameRate(5);
     console.log(grid)
-    start = 0;
-    end = 24;
+    destination = grid[end];
+    queue.push(grid[start]);
 }
 
 
-let queue = [];
-let current = grid[start];
+
 function draw() {
     background(51);
     removeElements();
     for (let i = 0; i < grid.length; i++) {
         grid[i].show();
     }
+
+    if (!stop) {
+        if (queue.length > 0) {
+            current = queue.shift();
+            current.highlighted = true
+            if (current === destination) {
+                console.log("prev", prev);
+                this.reconstructPath(start, end, prev);
+                stop = true;
+            }
+
+            for (const neighbour of current.opennedNeighbours) {
+                if (neighbour.visited)
+                    continue;
+                neighbour.visited = true;
+                queue.push(neighbour);
+                prev[neighbour.index] = current;
+
+            }
+        }
+    }
+
 }
 
 function createGridWithCells() {
+    let index = 0;
     for (let row = 0; row < nbCells; row++)
         for (let col = 0; col < nbCells; col++)
-            grid.push(new Cell(col, row, cellSize));
+            grid.push(new Cell(col, row, cellSize, index++));
 }
 
 function addNeighbours() {
@@ -74,7 +104,7 @@ function generateMaze() {
             current = stack.pop();
         }
     }
-    
+
     // reset the visited property for the BFS to perform.
     for (let i = 0; i < grid.length; i++)
         grid[i].visited = false;
@@ -98,5 +128,13 @@ function removeWall(current, next) {
         current.removeWall(2);
         next.removeWall(0);
     }
+}
+
+function reconstructPath(start, end, prev) {
+    let path = [];
+    for(let at = end; at > 0; at = prev[at].index)
+        path.push(prev[at]);
+
+    console.log("path", path);
 }
 

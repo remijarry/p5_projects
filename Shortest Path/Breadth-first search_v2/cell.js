@@ -1,15 +1,18 @@
-function Cell(posX, posY, size) {
+function Cell(posX, posY, size, index) {
     this.posX = posX;
     this.posY = posY;
     this.size = size;
+    this.index = index; //used later for the bfs to keep track of the previous visited nodes.
     //where do x and y start in pixels
     this.startX = this.posX * size;
     this.startY = this.posY * size;
     this.walls = [true, true, true, true];
     this.visited = false;
+    this.parents = [];
 
-    // available neighbours (with open walls)
+    // cell's neighbours
     this.neighbours = [];
+    // available neighbours (with open walls)
     this.opennedNeighbours = [];
 
     this.highlighted = false;
