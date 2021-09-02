@@ -1,15 +1,16 @@
 let size = 800;
-let nbCells = 50;
+let nbCells = 25;
 let cellSize = Math.floor(size / nbCells);
 let grid = [];
 
 let current;
-let start = 0;
-let end = 24;
+let start;
+let end;
 let destination;
-let stop = false;
+let destinationFound = false;
 let queue = [];
 let prev = [];
+let shortestPath;
 
 function setup() {
     createCanvas(size, size);
@@ -19,6 +20,8 @@ function setup() {
 
     // frameRate(5);
     console.log(grid)
+    start = 0;
+    end = grid.length - 1;
     destination = grid[end];
     queue.push(grid[start]);
 }
@@ -27,32 +30,18 @@ function setup() {
 
 function draw() {
     background(51);
-    removeElements();
+    showGrid();
+
+    if (!destinationFound) {
+        findShortestPath();
+    }
+
+}
+
+function showGrid() {
     for (let i = 0; i < grid.length; i++) {
         grid[i].show();
     }
-
-    if (!stop) {
-        if (queue.length > 0) {
-            current = queue.shift();
-            current.highlighted = true
-            if (current === destination) {
-                console.log("prev", prev);
-                this.reconstructPath(start, end, prev);
-                stop = true;
-            }
-
-            for (const neighbour of current.opennedNeighbours) {
-                if (neighbour.visited)
-                    continue;
-                neighbour.visited = true;
-                queue.push(neighbour);
-                prev[neighbour.index] = current;
-
-            }
-        }
-    }
-
 }
 
 function createGridWithCells() {
@@ -131,10 +120,30 @@ function removeWall(current, next) {
 }
 
 function reconstructPath(start, end, prev) {
-    let path = [];
-    for(let at = end; at > 0; at = prev[at].index)
-        path.push(prev[at]);
+    for (let at = end; at > 0; at = prev[at].index) {
+        grid[at].inShortestPath = true;
+    }
+    grid[start].inShortestPath = true;
+    console.log("reconstrcut pth", grid);
+}
 
-    console.log("path", path);
+function findShortestPath() {
+    if (queue.length > 0) {
+        current = queue.shift();
+        current.highlighted = true
+        if (current === destination) {
+            destinationFound = true;
+            return this.reconstructPath(start, end, prev);
+        }
+
+        for (const neighbour of current.opennedNeighbours) {
+            if (neighbour.visited)
+                continue;
+            neighbour.visited = true;
+            queue.push(neighbour);
+            prev[neighbour.index] = current;
+
+        }
+    }
 }
 

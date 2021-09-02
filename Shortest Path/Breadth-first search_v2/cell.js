@@ -16,6 +16,7 @@ function Cell(posX, posY, size, index) {
     this.opennedNeighbours = [];
 
     this.highlighted = false;
+    this.inShortestPath = false;
 
     this.show = function () {
         stroke(255);
@@ -43,6 +44,16 @@ function Cell(posX, posY, size, index) {
         if (this.highlighted) {
             noStroke();
             fill(0, 0, 255, 100);
+            rect(this.startX, this.startY, this.size, this.size)
+        }
+        if (this.inShortestPath) {
+            this.highlighted = false;
+            // strokeWeight(5)
+            // fill('rgba(0,255,0, 0.25)');
+            // point(this.startX + this.size / 2, this.startY + this.size / 2)
+
+            noStroke();
+            fill('rgba(0,255,0, 0.25)');
             rect(this.startX, this.startY, this.size, this.size)
         }
     }
