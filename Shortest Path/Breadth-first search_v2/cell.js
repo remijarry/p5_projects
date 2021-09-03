@@ -8,7 +8,6 @@ function Cell(posX, posY, size, index) {
     this.startY = this.posY * size;
     this.walls = [true, true, true, true];
     this.visited = false;
-    this.parents = [];
 
     // cell's neighbours
     this.neighbours = [];
@@ -17,6 +16,10 @@ function Cell(posX, posY, size, index) {
 
     this.highlighted = false;
     this.inShortestPath = false;
+    this.isDestination = false;
+
+    //DEBUG PURPOSE
+    this.from = undefined;
 
     this.show = function () {
         stroke(255);
@@ -41,6 +44,7 @@ function Cell(posX, posY, size, index) {
             line(this.startX, this.startY, this.startX, this.startY + this.size)
         }
 
+
         if (this.highlighted) {
             noStroke();
             fill(0, 0, 255, 100);
@@ -52,9 +56,47 @@ function Cell(posX, posY, size, index) {
             // fill('rgba(0,255,0, 0.25)');
             // point(this.startX + this.size / 2, this.startY + this.size / 2)
 
+            // noStroke();
+            // fill('rgba(0,255,0, 0.25)');
+            // rect(this.startX, this.startY, this.size, this.size)
+        }
+        if (this.isDestination) {
             noStroke();
-            fill('rgba(0,255,0, 0.25)');
+            fill('red');
             rect(this.startX, this.startY, this.size, this.size)
+        }
+
+
+        // Problem when you have from that has 2 opposite walls open.
+        if (this.from) {
+            strokeWeight(2)
+            if (this.from.walls[1] === false && this.walls[3] === false) {
+                // right arrow
+                // point(this.from.startX + this.size / 3, this.from.startY + this.size / 3);
+                // point(this.from.startX + this.size / 1.5, this.from.startY + this.size / 2);
+                line(this.from.startX + this.size / 3, this.from.startY + this.size / 3,
+                    this.from.startX + this.size / 1.5, this.from.startY + this.size / 2);
+
+                line(this.from.startX + this.size / 3, this.from.startY + this.size / 1.5,
+                    this.from.startX + this.size / 1.5, this.from.startY + this.size / 2);
+            }
+            else if (this.from.walls[2] === false && this.walls[0] === false) {
+                //down arrow
+                line(this.from.startX + this.size / 3, this.from.startY + this.size / 3,
+                     this.from.startX + this.size / 2, this.from.startY + this.size / 1.5);
+
+                line(this.from.startX + this.size / 1.5, this.from.startY + this.size /3,
+                     this.from.startX + this.size / 2, this.from.startY + this.size / 1.5);
+
+            }
+            else if (this.from.walls[3] === false && this.walls[1] === false) {
+                // left arrow
+
+            }
+            else if (this.from.walls[0] === false && this.walls[2] === false) {
+                //up arrow
+
+            }
         }
     }
 
@@ -102,5 +144,12 @@ function Cell(posX, posY, size, index) {
         }
 
         return neighbours;
+    }
+
+    this.clickedInside = function (mouseX, mouseY) {
+        return (mouseX > this.startX &&
+            mouseX < this.startX + this.size &&
+            mouseY > this.startY &&
+            mouseY < this.startY + this.size)
     }
 }

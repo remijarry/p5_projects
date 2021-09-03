@@ -18,11 +18,8 @@ function setup() {
     addNeighbours();
     generateMaze();
 
-    // frameRate(5);
-    console.log(grid)
     start = 0;
-    end = grid.length - 1;
-    destination = grid[end];
+    prev = new Array(grid.length);
     queue.push(grid[start]);
 }
 
@@ -31,11 +28,12 @@ function setup() {
 function draw() {
     background(51);
     showGrid();
-
-    if (!destinationFound) {
-        findShortestPath();
+    removeElements();
+    if (destination) {
+        if (!destinationFound) {
+            findShortestPath();
+        }
     }
-
 }
 
 function showGrid() {
@@ -121,10 +119,13 @@ function removeWall(current, next) {
 
 function reconstructPath(start, end, prev) {
     for (let at = end; at > 0; at = prev[at].index) {
+        let from = grid[prev[at].index];
+        
         grid[at].inShortestPath = true;
+        grid[at].from = from;
     }
     grid[start].inShortestPath = true;
-    console.log("reconstrcut pth", grid);
+    console.log(grid);
 }
 
 function findShortestPath() {
@@ -133,7 +134,7 @@ function findShortestPath() {
         current.highlighted = true
         if (current === destination) {
             destinationFound = true;
-            return this.reconstructPath(start, end, prev);
+            this.reconstructPath(start, destination.index, prev);
         }
 
         for (const neighbour of current.opennedNeighbours) {
@@ -143,6 +144,16 @@ function findShortestPath() {
             queue.push(neighbour);
             prev[neighbour.index] = current;
 
+        }
+    }
+}
+
+function mouseClicked() {
+    for (let i = 0; i < grid.length; i++) {
+        if (grid[i].clickedInside(mouseX, mouseY)) {
+            destination = grid[i];
+            grid[i].isDestination = true;
+            break;
         }
     }
 }
