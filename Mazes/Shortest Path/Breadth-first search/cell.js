@@ -26,6 +26,8 @@ function Cell(posX, posY, size, index) {
         strokeWeight(1);
 
         // let p = createP(this.posX + ", " + this.posY);
+        // p.style('font-size', '16px');
+        // p.style('color', 'white');
         // p.position(this.startX + 10, this.startY + 10)
 
         if (this.walls[0]) {
@@ -44,7 +46,6 @@ function Cell(posX, posY, size, index) {
             line(this.startX, this.startY, this.startX, this.startY + this.size)
         }
 
-
         if (this.highlighted) {
             noStroke();
             fill(0, 0, 255, 100);
@@ -52,50 +53,29 @@ function Cell(posX, posY, size, index) {
         }
         if (this.inShortestPath) {
             this.highlighted = false;
-            // strokeWeight(5)
-            // fill('rgba(0,255,0, 0.25)');
-            // point(this.startX + this.size / 2, this.startY + this.size / 2)
-
-            // noStroke();
-            // fill('rgba(0,255,0, 0.25)');
-            // rect(this.startX, this.startY, this.size, this.size)
         }
         if (this.isDestination) {
-            noStroke();
+            // noStroke();
             fill('red');
-            rect(this.startX, this.startY, this.size, this.size)
+           circle(this.startX + this.size / 2, this.startY + this.size / 2, 2)
         }
 
 
-        // Problem when you have from that has 2 opposite walls open.
         if (this.from) {
             strokeWeight(2)
-            if (this.from.walls[1] === false && this.walls[3] === false) {
-                // right arrow
-                // point(this.from.startX + this.size / 3, this.from.startY + this.size / 3);
-                // point(this.from.startX + this.size / 1.5, this.from.startY + this.size / 2);
-                line(this.from.startX + this.size / 3, this.from.startY + this.size / 3,
-                    this.from.startX + this.size / 1.5, this.from.startY + this.size / 2);
+            let x = this.from.posX - this.posX;
+            let y = this.from.posY - this.posY;
 
-                line(this.from.startX + this.size / 3, this.from.startY + this.size / 1.5,
-                    this.from.startX + this.size / 1.5, this.from.startY + this.size / 2);
+            if (x === 1) {
+                this.leftArrow();
+            } else if (x === -1) {
+                this.rightArrow();
             }
-            else if (this.from.walls[2] === false && this.walls[0] === false) {
-                //down arrow
-                line(this.from.startX + this.size / 3, this.from.startY + this.size / 3,
-                     this.from.startX + this.size / 2, this.from.startY + this.size / 1.5);
 
-                line(this.from.startX + this.size / 1.5, this.from.startY + this.size /3,
-                     this.from.startX + this.size / 2, this.from.startY + this.size / 1.5);
-
-            }
-            else if (this.from.walls[3] === false && this.walls[1] === false) {
-                // left arrow
-
-            }
-            else if (this.from.walls[0] === false && this.walls[2] === false) {
-                //up arrow
-
+            if (y === 1) {
+                this.upArrow();
+            } else if (y === -1) {
+                this.downArrow();
             }
         }
     }
@@ -151,5 +131,37 @@ function Cell(posX, posY, size, index) {
             mouseX < this.startX + this.size &&
             mouseY > this.startY &&
             mouseY < this.startY + this.size)
+    }
+
+    this.rightArrow = function () {
+        line(this.from.startX + this.size / 3, this.from.startY + this.size / 3,
+            this.from.startX + this.size / 1.5, this.from.startY + this.size / 2);
+
+        line(this.from.startX + this.size / 3, this.from.startY + this.size / 1.5,
+            this.from.startX + this.size / 1.5, this.from.startY + this.size / 2);
+    }
+
+    this.downArrow = function () {
+        line(this.from.startX + this.size / 3, this.from.startY + this.size / 3,
+            this.from.startX + this.size / 2, this.from.startY + this.size / 1.5);
+
+        line(this.from.startX + this.size / 1.5, this.from.startY + this.size / 3,
+            this.from.startX + this.size / 2, this.from.startY + this.size / 1.5);
+    }
+
+    this.leftArrow = function () {
+        line(this.from.startX + this.size / 1.5, this.from.startY + this.size / 3,
+            this.from.startX + this.size / 3, this.from.startY + this.size / 2);
+
+        line(this.from.startX + this.size / 1.5, this.from.startY + this.size / 1.5,
+            this.from.startX + this.size / 3, this.from.startY + this.size / 2);
+    }
+
+    this.upArrow = function () {
+        line(this.from.startX + this.size / 3, this.from.startY + this.size / 1.5,
+            this.from.startX + this.size / 2, this.from.startY + this.size / 3);
+
+        line(this.from.startX + this.size / 1.5, this.from.startY + this.size / 1.5,
+            this.from.startX + this.size / 2, this.from.startY + this.size / 3);
     }
 }

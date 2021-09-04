@@ -1,6 +1,6 @@
-let size = 800;
+let mazeSize = 800;
 let nbCells = 25;
-let cellSize = Math.floor(size / nbCells);
+let cellSize = Math.floor(mazeSize / nbCells);
 let grid = [];
 
 let current;
@@ -8,12 +8,11 @@ let start;
 let end;
 let destination;
 let destinationFound = false;
-let queue = [];
-let prev = [];
+let queue = [];let prev = [];
 let shortestPath;
 
 function setup() {
-    createCanvas(size, size);
+    createCanvas(mazeSize, mazeSize);
     createGridWithCells();
     addNeighbours();
     generateMaze();
@@ -21,6 +20,7 @@ function setup() {
     start = 0;
     prev = new Array(grid.length);
     queue.push(grid[start]);
+    // frameRate(3)
 }
 
 
@@ -28,7 +28,6 @@ function setup() {
 function draw() {
     background(51);
     showGrid();
-    removeElements();
     if (destination) {
         if (!destinationFound) {
             findShortestPath();
@@ -125,7 +124,6 @@ function reconstructPath(start, end, prev) {
         grid[at].from = from;
     }
     grid[start].inShortestPath = true;
-    console.log(grid);
 }
 
 function findShortestPath() {
