@@ -4,8 +4,7 @@
 class BinaryTree {
     constructor(grid) {
         this.grid = grid;
-        this._setNeightors();
-        console.log(this.grid);
+        this._carveMaze();
     }
 
     /**
@@ -13,7 +12,7 @@ class BinaryTree {
      * @param {The grid where the maze will be drawn} grid 
      * @param {The neighbors of each cell in the grid} neighbors 
      */
-    _setNeightors() {
+    _carveMaze() {
         for (let row = 0; row < this.grid.rows; row++) {
             for (let col = 0; col < this.grid.columns; col++) {
                 let currentCell = this.grid.cells[row][col];

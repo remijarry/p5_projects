@@ -11,7 +11,7 @@ class Grid {
         for (let row = 0; row < this.rows; row++) {
             let rowArray = [];
             for (let col = 0; col < this.columns; col++) {
-                rowArray.push(new Cell(row, col));
+                rowArray.push(new Cell(col, row));
             }
             this.cells.push(rowArray);
         }
@@ -105,7 +105,7 @@ class Grid {
     }
 }
 
-Grid.prototype.toString = function gridToString() {
+Grid.prototype.toString = function toString() {
     let output = "+"
     for (let i = 0; i < this.columns; i++) {
         output += "---+";
@@ -134,4 +134,29 @@ Grid.prototype.toString = function gridToString() {
         output += "\n";
     }
     console.log(output)
+}
+
+Grid.prototype.toCanvas = function (canvasWidth) {
+    let cellSize = (canvasWidth / this.rows);
+    for (let row = 0; row < this.rows; row++) {
+        for (let col = 0; col < this.columns; col++) {
+            let cell = this.cells[row][col];
+            let x1 = cell.pos.x * cellSize;
+            let y1 = cell.pos.y * cellSize;
+            let x2 = (cell.pos.x + 1) * cellSize;
+            let y2 = (cell.pos.y + 1) * cellSize;
+
+            stroke(255);
+            strokeWeight(2)
+            if (!cell.north)
+                line(x1, y1, x2, y1);
+            if (!cell.west)
+                line(x1, y1, x1, y2);
+            if (cell.east && !cell.isLinked(cell.east))
+                line(x2, y1, x2, y2)
+            if (cell.south && !cell.isLinked(cell.south))
+                line(x1, y2, x2, y2);
+        }
+
+    }
 }
