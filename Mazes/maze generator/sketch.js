@@ -1,16 +1,17 @@
-let grid;
+// var sideWinder = function (sw) {
 
-function setup() {
-    createCanvas(800, 800)
-    //-----------------------------------
-    grid = new Grid(50, 50);
-    // let sidewinderMaze = new Sindewinder(grid);
-    let binaryMaze = new BinaryTree(grid);
-    grid.toString();
-}
+//     sw.setup = function () {
+//         sw.createCanvas(sw.windowWidth / 2, sw.windowHeight / 2);
+//         sw.grid = new Grid(20, 20, sw)
+//         let maze = new Sindewinder(sw.grid, sw);
+//     };
 
-function draw() {
-    background(51)
-    removeElements();
-    grid.toCanvas(width);
-}
+//     sw.draw = function () {
+//         sw.background(51);
+//         sw.grid.toCanvas(sw.width);
+//     }
+// }
+
+// var sideWinderMaze = new p5(sideWinder, "sindeWinderMaze");
+var sideWinderMaze = new p5(sideWinder, "sindeWinderMaze");
+var binaryMaze = new p5(binaryMaze, "binaryMaze");

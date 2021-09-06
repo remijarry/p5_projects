@@ -1,5 +1,5 @@
 let mazeSize = 800;
-let nbCells = 25;
+let nbCells = 50;
 let cellSize = Math.floor(mazeSize / nbCells);
 let grid = [];
 

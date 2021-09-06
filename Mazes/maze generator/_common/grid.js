@@ -1,8 +1,9 @@
 class Grid {
-    constructor(rows, columns) {
+    constructor(rows, columns, sw) {
         this.rows = rows;
         this.columns = columns;
         this.cells = [];
+        this.sw = sw;
         this._prepareGrid();
         this._configureCells();
     }
@@ -11,7 +12,7 @@ class Grid {
         for (let row = 0; row < this.rows; row++) {
             let rowArray = [];
             for (let col = 0; col < this.columns; col++) {
-                rowArray.push(new Cell(col, row));
+                rowArray.push(new Cell(col, row, this.sw));
             }
             this.cells.push(rowArray);
         }
@@ -105,7 +106,7 @@ class Grid {
     }
 }
 
-Grid.prototype.toString = function toString() {
+Grid.prototype.toConsole = function () {
     let output = "+"
     for (let i = 0; i < this.columns; i++) {
         output += "---+";
@@ -146,17 +147,20 @@ Grid.prototype.toCanvas = function (canvasWidth) {
             let x2 = (cell.pos.x + 1) * cellSize;
             let y2 = (cell.pos.y + 1) * cellSize;
 
-            stroke(255);
-            strokeWeight(2)
-            if (!cell.north)
-                line(x1, y1, x2, y1);
-            if (!cell.west)
-                line(x1, y1, x1, y2);
-            if (cell.east && !cell.isLinked(cell.east))
-                line(x2, y1, x2, y2)
-            if (cell.south && !cell.isLinked(cell.south))
-                line(x1, y2, x2, y2);
+            this.sw.stroke(255);
+            this.sw.strokeWeight(2)
+            if (!cell.north) {
+                this.sw.line(x1, y1, x2, y1);
+            }
+            if (!cell.west) {
+                this.sw.line(x1, y1, x1, y2);
+            }
+            if (cell.east && !cell.isLinked(cell.east)) {
+                this.sw.line(x2, y1, x2, y2)
+            }
+            if (cell.south && !cell.isLinked(cell.south)) {
+                this.sw.line(x1, y2, x2, y2);
+            }
         }
-
     }
 }

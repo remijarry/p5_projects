@@ -1,6 +1,6 @@
 class Cell {
-    constructor(row, col) {
-        this.pos = createVector(row, col)
+    constructor(row, col, sw) {
+        this.pos = sw.createVector(row, col)
         this.links = new Map()
         this.north = undefined;
         this.south = undefined;
