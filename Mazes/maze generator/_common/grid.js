@@ -1,9 +1,9 @@
 class Grid {
-    constructor(rows, columns, sw) {
-        this.rows = rows;
-        this.columns = columns;
+    constructor(nbCells, context) {
+        this.rows = nbCells;
+        this.columns = nbCells;
         this.cells = [];
-        this.sw = sw;
+        this.context = context;
         this._prepareGrid();
         this._configureCells();
     }
@@ -12,7 +12,7 @@ class Grid {
         for (let row = 0; row < this.rows; row++) {
             let rowArray = [];
             for (let col = 0; col < this.columns; col++) {
-                rowArray.push(new Cell(col, row, this.sw));
+                rowArray.push(new Cell(col, row, this.context));
             }
             this.cells.push(rowArray);
         }
@@ -161,6 +161,7 @@ Grid.prototype.toCanvas = function (canvasWidth) {
             if (cell.south && !cell.isLinked(cell.south)) {
                 this.sw.line(x1, y2, x2, y2);
             }
+            this.sw.redraw();
         }
     }
 }
