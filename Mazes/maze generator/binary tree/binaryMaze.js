@@ -5,7 +5,6 @@ class BinaryMaze {
   constructor(nbCells, context) {
     this.grid = new Grid(nbCells, context);
     this.context = context;
-    //this._carveMaze();
   }
 
   /**
@@ -17,7 +16,6 @@ class BinaryMaze {
     for (let row = 0; row < this.grid.rows; row++) {
       for (let col = 0; col < this.grid.columns; col++) {
         let currentCell = this.grid.cells[row][col];
-        // animate here.
         let neighbors = [];
         if (this.grid.cells[row][col].north)
           neighbors.push(this.grid.cells[row][col].north);
@@ -28,9 +26,6 @@ class BinaryMaze {
         if (neighbor) {
           currentCell.link(neighbor);
         }
-
-        this.grid.toConsole();
-        this.grid.toCanvas();
       }
     }
   }
@@ -39,15 +34,42 @@ class BinaryMaze {
 // The code below is used to handle multiple sketches on the screen.
 
 var binaryMaze = function (bm) {
-  bm.grid;
   bm.canvasSize = bm.windowWidth / 3;
+  bm.nbCells = 20;
+
+  bm.unvisited = bm.nbCells * bm.nbCells;
+  bm.rowIndex = 0;
+  bm.colIndex = 0;
+
   bm.setup = function () {
     bm.createCanvas(bm.canvasSize, bm.canvasSize);
-    bm.maze = new BinaryMaze(20, bm);
-    bm.maze.grid.toConsole();
+    bm.maze = new BinaryMaze(bm.nbCells, bm);
   };
 
   bm.draw = function () {
     bm.background(51);
+    bm.maze.grid.toCanvas();
+
+    if (this.unvisited > 0) {
+      let currentCell = bm.maze.grid.cells[this.rowIndex][this.colIndex];
+
+      let neighbors = [];
+      if (bm.maze.grid.cells[this.rowIndex][this.colIndex].north)
+        neighbors.push(bm.maze.grid.cells[this.rowIndex][this.colIndex].north);
+      if (bm.maze.grid.cells[this.rowIndex][this.colIndex].east)
+        neighbors.push(bm.maze.grid.cells[this.rowIndex][this.colIndex].east);
+
+      let neighbor = bm.random(neighbors);
+      if (neighbor) {
+        currentCell.link(neighbor);
+      }
+
+      this.colIndex++;
+      if (this.colIndex >= bm.nbCells) {
+        this.rowIndex++;
+        this.colIndex = 0;
+      }
+      this.unvisited--;
+    }
   };
 };
