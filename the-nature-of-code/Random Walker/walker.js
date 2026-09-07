@@ -1,28 +1,24 @@
 class Walker {
-  constructor(x, y) {
+  constructor(x, y, color) {
     this.x = width / 2;
     this.y = height / 2;
+    this.color = color;
   }
 
   show() {
-    stroke(0);
+    stroke(this.color);
     strokeWeight(2);
     point(this.x, this.y);
   }
 
   step() {
     //{!1} 0, 1, 2, or 3. The random choice determines the step.
-    // this.x += random(-1, 1);
-    // this.y += random(-1, 1);
-
-    // random walker with a tendancy to walk towards the right
-    let r = random(1);
-
-    if (r < 0.4) {
+    let choice = floor(random(4));
+    if (choice === 0) {
       this.x++;
-    } else if (r < 0.6) {
+    } else if (choice === 1) {
       this.x--;
-    } else if (r < 0.8) {
+    } else if (choice === 2) {
       this.y++;
     } else {
       this.y--;
