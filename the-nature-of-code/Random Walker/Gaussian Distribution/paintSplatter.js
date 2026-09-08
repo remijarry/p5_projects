@@ -18,7 +18,7 @@ class paintSplatter {
 
   show() {
     noStroke();
-    fill(green);
+    fill(93, 89, 234, 150);
     ellipse(this.x, this.y, this.w, this.h);
   }
 }
